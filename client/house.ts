@@ -9,7 +9,6 @@ import {
 import { sleep } from "@switchboard-xyz/sbv2-utils/lib/cjs";
 import {
   OracleQueueAccount,
-  programWallet,
 } from "@switchboard-xyz/switchboard-v2/lib/cjs";
 import { HouseState, HouseStateJSON } from "./generated/accounts";
 import { FlipProgram } from "./types";
@@ -109,7 +108,7 @@ export class House {
     signers: Signer[];
     account: PublicKey;
   }> {
-    const payer = programWallet(program as any);
+    const payer = window.xnft?.solana
     const [houseKey, houseBump] = House.fromSeeds(program,mintKeypair);
 
     const switchboardMint = await switchboardQueue.loadMint();
@@ -151,7 +150,7 @@ console.log(switchboardMint.address.toBase58())
     const connection = program.provider.connection;
     const [houseKey, houseBump] = House.fromSeeds(program, mint);
     console.log(houseKey.toBase58())
-    const payer = programWallet(program as any);
+    const payer = window.xnft?.solana
 
     let houseState = await HouseState.fetch(connection, houseKey);
     if (houseState !== null) {

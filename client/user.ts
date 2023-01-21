@@ -18,7 +18,6 @@ import {
   packTransactions,
   PermissionAccount,
   ProgramStateAccount,
-  programWallet,
   SwitchboardProgram,
   VrfAccount,
 } from "@switchboard-xyz/switchboard-v2/lib/cjs";
@@ -226,11 +225,11 @@ export class User {
       program.provider.connection,
       [new Transaction().add(...req.ixns)],
       req.signers as Keypair[],
-      programWallet(program as any).publicKey
+      window.xnft?.solana.publicKey
     );
 
     const signedTxs = await (
-      program.provider as anchor.AnchorProvider
+      window.xnft?.solana
     ).wallet.signAllTransactions(packedTxns);
     const promises = [];
     const sigs: string[] = [];
@@ -267,7 +266,7 @@ export class User {
     program: FlipProgram,
     switchboardProgram: anchor.Program,
     mint: PublicKey,
-    payerPubkey = programWallet(program as any).publicKey,
+    payerPubkey = window.xnft?.solana.publicKey,
   ): Promise<{
     ixns: TransactionInstruction[];
     signers: Signer[];
@@ -413,7 +412,7 @@ export class User {
     userGuess: number,
     betAmount: anchor.BN,
     switchboardTokenAccount?: PublicKey,
-    payerPubkey = programWallet(this.program as any).publicKey
+    payerPubkey = window.xnft?.solana.publicKey
   ): Promise<string> {
     const req = await this.placeBetReq(
       gameType,
@@ -437,7 +436,7 @@ export class User {
     betAmount: anchor.BN,
     mint: PublicKey,
     switchboardTokenAccount?: PublicKey,
-    payerPubkey = programWallet(this.program as any).publicKey
+    payerPubkey = window.xnft?.solana.publicKey
   ): Promise<{ ixns: TransactionInstruction[]; signers: Signer[] }> {
     try {
       await verifyPayerBalance(this.program.provider.connection, payerPubkey);
@@ -448,7 +447,7 @@ export class User {
     const house = await House.load(this.program, new PublicKey(mint));
 
     const switchboard = await loadSwitchboard(
-      this.program.provider as anchor.AnchorProvider
+      window.xnft?.solana
     );
     const vrfContext = await loadVrfContext(switchboard, this.state.vrf);
 
@@ -655,7 +654,7 @@ export class User {
     return state.currentRound.guess === state.currentRound.result;
   }
 
-  async airdropReq(payerPubkey = programWallet(this.program as any).publicKey, mint: PublicKey) {
+  async airdropReq(payerPubkey = window.xnft?.solana.publicKey, mint: PublicKey) {
     try {
       await verifyPayerBalance(this.program.provider.connection, payerPubkey);
     } catch {}
@@ -701,7 +700,7 @@ export class User {
   }
 
   async airdrop(
-    payerPubkey = programWallet(this.program as any).publicKey,
+    payerPubkey = window.xnft?.solana.publicKey,
     mint: PublicKey,
   ): Promise<string> {
     const req = await this.airdropReq(payerPubkey, new PublicKey(mint));
