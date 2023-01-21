@@ -2,7 +2,11 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "npx xnft native start",
-    "build": "cp -r ./node_modules/@solana/buffer-layout-utils/* node_modules/@solana/*/node_modules/@solana/buffer-layout-utils/ ; expo export:web",
+    "build": "rm -rf ./node_modules/wallet*/**/esm  ./node_modules/*xnft*/**/esm  
+./node_modules/@strata*/**/esm  ./node_modules/@solana*/**/esm  
+./node_modules/@wallet*/**/esm ./node_modules/*xnft/**/esm  
+./node_modules/@cardinal*/**/esm; cp -r ./node_modules/@solana/buffer-layout-utils/* 
+node_modules/@solana/*/node_modules/@solana/buffer-layout-utils/ ; expo export:web",
     "dev": "expo start --web & npx xnft dev --iframe http://localhost:19006"
   },
   "dependencies": {
