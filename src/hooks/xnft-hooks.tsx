@@ -83,10 +83,10 @@ export function useDidLaunch() {
 export const useReady = useDidLaunch;
 
 export function useMetadata(): XnftMetadata {
-  const [metadata, setMetadata] = useState(window.xnft?.metadata || {});
+  const [metadata, setMetadata] = useState(window.xnft.metadata || {});
 
   useEffect(() => {
-    setMetadata(window.xnft?.metadata || {});
+    setMetadata(window.xnft.metadata || {});
     window.xnft.addListener("metadata", (event: Event) => {
       setMetadata(event.data.metadata);
     });

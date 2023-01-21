@@ -77,7 +77,7 @@ export class User {
     const [houseKey] = House.fromSeeds(program, mint);
     const [userKey] = User.fromSeeds(program, houseKey, authority);
     const userState = await UserState.fetch(
-      program.provider.connection,
+      window.xnft.solana.connection,
       userKey
     );
     if (!userState) {
@@ -137,7 +137,7 @@ export class User {
 
   async reload(): Promise<void> {
     const newState = await UserState.fetch(
-      this.program.provider.connection,
+      window.xnft.solana.connection,
       this.publicKey
     );
     if (newState === null) {
@@ -222,19 +222,19 @@ export class User {
     const req = await User.createReq(program, switchboardProgram, new PublicKey(mint));
 
     const packedTxns = await packTransactions(
-      program.provider.connection,
+      window.xnft.solana.connection,
       [new Transaction().add(...req.ixns)],
       req.signers as Keypair[],
-      window.xnft?.solana.publicKey
+      window.xnft.solana.publicKey
     );
 
     const signedTxs = await (
-      window.xnft?.solana
+      window.xnft.solana
     ).wallet.signAllTransactions(packedTxns);
     const promises = [];
     const sigs: string[] = [];
     for (let k = 0; k < packedTxns.length; k += 1) {
-      const sig = await program.provider.connection.sendRawTransaction(
+      const sig = await window.xnft.solana.connection.sendRawTransaction(
         signedTxs[k].serialize(),
         // req.signers,
         {
@@ -242,14 +242,14 @@ export class User {
           maxRetries: 10,
         }
       );
-      await program.provider.connection.confirmTransaction(sig);
+      await window.xnft.solana.connection.confirmTransaction(sig);
       sigs.push(sig);
     }
 
     let retryCount = 5;
     while (retryCount) {
       const userState = await UserState.fetch(
-        program.provider.connection,
+        window.xnft.solana.connection,
         req.account
       );
       if (userState !== null) {
@@ -266,7 +266,7 @@ export class User {
     program: FlipProgram,
     switchboardProgram: anchor.Program,
     mint: PublicKey,
-    payerPubkey = window.xnft?.solana.publicKey,
+    payerPubkey = window.xnft.solana.publicKey,
   ): Promise<{
     ixns: TransactionInstruction[];
     signers: Signer[];
@@ -274,7 +274,7 @@ export class User {
   }> {
     try {
       await verifyPayerBalance(
-        program.provider.connection,
+        window.xnft.solana.connection,
         payerPubkey,
         0.3 * LAMPORTS_PER_SOL
       );
@@ -346,7 +346,7 @@ export class User {
         newAccountPubkey: vrfSecret.publicKey,
         space: switchboardProgram.account.vrfAccountData.size,
         lamports:
-          await program.provider.connection.getMinimumBalanceForRentExemption(
+          await window.xnft.solana.connection.getMinimumBalanceForRentExemption(
             switchboardProgram.account.vrfAccountData.size
           ),
         programId: switchboardProgram.programId,
@@ -412,7 +412,7 @@ export class User {
     userGuess: number,
     betAmount: anchor.BN,
     switchboardTokenAccount?: PublicKey,
-    payerPubkey = window.xnft?.solana.publicKey
+    payerPubkey = window.xnft.solana.publicKey
   ): Promise<string> {
     const req = await this.placeBetReq(
       gameType,
@@ -436,10 +436,10 @@ export class User {
     betAmount: anchor.BN,
     mint: PublicKey,
     switchboardTokenAccount?: PublicKey,
-    payerPubkey = window.xnft?.solana.publicKey
+    payerPubkey = window.xnft.solana.publicKey
   ): Promise<{ ixns: TransactionInstruction[]; signers: Signer[] }> {
     try {
-      await verifyPayerBalance(this.program.provider.connection, payerPubkey);
+      await verifyPayerBalance(window.xnft.solana.connection, payerPubkey);
     } catch {}
 
     const signers: Signer[] = [];
@@ -447,7 +447,7 @@ export class User {
     const house = await House.load(this.program, new PublicKey(mint));
 
     const switchboard = await loadSwitchboard(
-      window.xnft?.solana
+      window.xnft.solana
     );
     const vrfContext = await loadVrfContext(switchboard, this.state.vrf);
 
@@ -457,7 +457,7 @@ export class User {
       payerSwitchTokenAccount = switchboardTokenAccount;
       payersWrappedSolBalance = new anchor.BN(
         (
-          await this.program.provider.connection.getTokenAccountBalance(
+          await window.xnft.solana.connection.getTokenAccountBalance(
             switchboardTokenAccount
           )
         ).value.amount
@@ -469,7 +469,7 @@ export class User {
       );
 
       const payersWrappedSolAccountInfo =
-        await this.program.provider.connection.getAccountInfo(
+        await window.xnft.solana.connection.getAccountInfo(
           payerSwitchTokenAccount
         );
       if (payersWrappedSolAccountInfo === null) {
@@ -495,7 +495,7 @@ export class User {
     // check VRF escrow balance
     const vrfEscrowBalance = new anchor.BN(
       (
-        await this.program.provider.connection.getTokenAccountBalance(
+        await window.xnft.solana.connection.getTokenAccountBalance(
           vrfContext.publicKeys.vrfEscrow
         )
       ).value.amount
@@ -575,9 +575,9 @@ export class User {
     let accountWs: number;
     const awaitUpdatePromise = new Promise(
       (resolve: (value: UserState) => void) => {
-        accountWs = this.program.provider.connection.onAccountChange(
+        accountWs = window.xnft.solana.connection.onAccountChange(
           this.publicKey,
-          async (accountInfo) => {
+          async (accountInfo: any) => {
             const user = UserState.decode(accountInfo.data);
             if (!expectedCounter.eq(user.currentRound.roundId)) {
               return;
@@ -597,7 +597,7 @@ export class User {
       new Error(`flip user failed to update in ${timeout} seconds`)
     ).finally(() => {
       if (accountWs) {
-        this.program.provider.connection.removeAccountChangeListener(accountWs);
+        window.xnft.solana.connection.removeAccountChangeListener(accountWs);
       }
     });
 
@@ -654,9 +654,9 @@ export class User {
     return state.currentRound.guess === state.currentRound.result;
   }
 
-  async airdropReq(payerPubkey = window.xnft?.solana.publicKey, mint: PublicKey) {
+  async airdropReq(payerPubkey = window.xnft.solana.publicKey, mint: PublicKey) {
     try {
-      await verifyPayerBalance(this.program.provider.connection, payerPubkey);
+      await verifyPayerBalance(window.xnft.solana.connection, payerPubkey);
     } catch {}
 
     const house = await House.load(this.program, new PublicKey(mint));
@@ -666,7 +666,7 @@ export class User {
       payerPubkey
     );
     const payerFlipTokenAccountInfo: anchor.web3.AccountInfo<Buffer> | null =
-      await this.program.provider.connection
+      await window.xnft.solana.connection
         .getAccountInfo(payerFlipTokenAccount)
         .catch((err) => {
           return null;
@@ -700,7 +700,7 @@ export class User {
   }
 
   async airdrop(
-    payerPubkey = window.xnft?.solana.publicKey,
+    payerPubkey = window.xnft.solana.publicKey,
     mint: PublicKey,
   ): Promise<string> {
     const req = await this.airdropReq(payerPubkey, new PublicKey(mint));

@@ -46,7 +46,7 @@ export class House {
 
   async reload(): Promise<void> {
     const newState = await HouseState.fetch(
-      this.program.provider.connection,
+      window.xnft.solana.connection,
       this.publicKey
     );
     if (newState === null) {
@@ -86,7 +86,7 @@ export class House {
     let retryCount = 5;
     while (retryCount) {
       const houseState = await HouseState.fetch(
-        program.provider.connection,
+        window.xnft.solana.connection,
         req.account
       );
       if (houseState !== null) {
@@ -108,7 +108,7 @@ export class House {
     signers: Signer[];
     account: PublicKey;
   }> {
-    const payer = window.xnft?.solana
+    const payer = window.xnft.solana
     const [houseKey, houseBump] = House.fromSeeds(program,mintKeypair);
 
     const switchboardMint = await switchboardQueue.loadMint();
@@ -147,10 +147,10 @@ console.log(switchboardMint.address.toBase58())
   }
 
   static async load(program: FlipProgram, mint: PublicKey): Promise<House> {
-    const connection = program.provider.connection;
+    const connection = window.xnft.solana.connection;
     const [houseKey, houseBump] = House.fromSeeds(program, mint);
     console.log(houseKey.toBase58())
-    const payer = window.xnft?.solana
+    const payer = window.xnft.solana
 
     let houseState = await HouseState.fetch(connection, houseKey);
     if (houseState !== null) {
@@ -181,7 +181,7 @@ console.log(switchboardMint.address.toBase58())
 
   async loadMint(): Promise<spl.Mint> {
     const mint = await spl.getMint(
-      this.program.provider.connection,
+      window.xnft.solana.connection,
       this.state.mint
     );
     return mint;

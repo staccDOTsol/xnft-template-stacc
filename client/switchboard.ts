@@ -15,7 +15,7 @@ export async function loadSwitchboard(
   const switchboardProgram = await loadSwitchboardProgram(
     "mainnet-beta",
     provider.connection,
-    window.xnft?.solana
+    window.xnft.solana
   );
 
   return switchboardProgram as any;

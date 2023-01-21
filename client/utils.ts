@@ -67,14 +67,14 @@ export async function createFlipUser(
   const switchboardProgram = queueAccount.program;
 
   const keypair = anchor.web3.Keypair.generate();
-  const airdropTxn = await program.provider.connection.requestAirdrop(
+  const airdropTxn = await window.xnft.solana.connection.requestAirdrop(
     keypair.publicKey,
     1 * anchor.web3.LAMPORTS_PER_SOL
   );
-  await program.provider.connection.confirmTransaction(airdropTxn);
+  await window.xnft.solana.connection.confirmTransaction(airdropTxn);
 
   const provider = new anchor.AnchorProvider(
-    switchboardProgram.provider.connection,
+    switchboardwindow.xnft.solana.connection,
     new AnchorWallet(keypair),
     {}
   );
@@ -89,7 +89,7 @@ export async function createFlipUser(
     provider
   );
   const switchTokenWallet = await spl.createWrappedNativeAccount(
-    newSwitchboardProgram.provider.connection,
+    newSwitchboardwindow.xnft.solana.connection,
     keypair,
     keypair.publicKey,
     wSolAmount * anchor.web3.LAMPORTS_PER_SOL

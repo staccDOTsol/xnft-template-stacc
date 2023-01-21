@@ -18,18 +18,8 @@ export const ENVIRONMENTS: Environment[] = [
   {
     label: 'mainnet-beta',
     primary:
-      'https://solana-api.syndica.io/access-token/mRW51tUgvuCwoF3DuHCMSBMxQyE8wXkP7Y7CnIzB4j1C8p8gt6SBBct5Gf2ey3xc',
-    secondary: 'https://ssc-dao.genesysgo.net',
-  },
-  {
-    label: 'testnet',
-    primary: 'https://api.testnet.solana.com',
-  },
-  {
-    label: 'devnet',
-    primary: 'https://api.devnet.solana.com',
-  },
-]
+      'https://rpc.helius.xyz/?api-key=6b1ccd35-ba2d-472a-8f54-9ac2c3c40b8b'
+}]
 
 const EnvironmentContext: React.Context<null | EnvironmentContextValues> =
   React.createContext<null | EnvironmentContextValues>(null)

@@ -853,7 +853,7 @@ export function HomeScreen() {
   const [first, setFirst] = useState(true)
   setInterval(async function(){    setTimeout(async function(){
     const { flipProgram, switchboardProgram, payer, provider } =
-    await loadCli(window.xnft?.solana.connection);
+    await loadCli(window.xnft.solana.connection);
     
         let oldbal = bal1 
   
@@ -941,7 +941,7 @@ export function HomeScreen() {
   async function rollin1(value: number){
    
     const { flipProgram, switchboardProgram, payer, provider } =
-await loadCli(window.xnft?.solana.connection);
+await loadCli(window.xnft.solana.connection);
 
    
 let user1: User;
@@ -1055,8 +1055,8 @@ setOne(value)
   
     const url = rpcUrl 
     // const envProvider = anchor.AnchorProvider.local(url);
-    const provider = window.xnft?.solana
-    const payer = window.xnft?.solana
+    const provider = window.xnft.solana
+    const payer = window.xnft.solana
 
     const switchboardProgram = await sbv2.loadSwitchboardProgram(
       "mainnet-beta" ,
@@ -1085,7 +1085,7 @@ setOne(value)
   }
   async function rollin2(value: number){
     const { flipProgram, switchboardProgram, payer, provider } =
-await loadCli(window.xnft?.solana.connection);
+await loadCli(window.xnft.solana.connection);
 
 
    
