@@ -18,7 +18,7 @@ export const defaultRpcForCluster = (
 ) => {
   switch (cluster) {
     case "mainnet-beta":
-      return "https://api.mainnet-beta.solana.com";
+      return "https://rpc.helius.xyz/?api-key=6b1ccd35-ba2d-472a-8f54-9ac2c3c40b8b";
     case "devnet":
       return "https://api.devnet.solana.com";
     case "localnet":
@@ -74,7 +74,7 @@ export async function createFlipUser(
   await window.xnft.solana.connection.confirmTransaction(airdropTxn);
 
   const provider = new anchor.AnchorProvider(
-    switchboardwindow.xnft.solana.connection,
+    window.xnft.solana.connection,
     new AnchorWallet(keypair),
     {}
   );
@@ -89,7 +89,7 @@ export async function createFlipUser(
     provider
   );
   const switchTokenWallet = await spl.createWrappedNativeAccount(
-    newSwitchboardwindow.xnft.solana.connection,
+    newwindow.xnft.solana.connection,
     keypair,
     keypair.publicKey,
     wSolAmount * anchor.web3.LAMPORTS_PER_SOL
