@@ -1,5 +1,5 @@
 import * as anchor from "@coral-xyz/anchor";
-import * as spl from "../../spl-token";
+import * as spl from "../spl-token";
 import {
   PublicKey,
   Signer,
