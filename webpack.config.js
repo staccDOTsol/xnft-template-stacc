@@ -1,8 +1,21 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 const fs = require("fs");
+const path = require("path");
 
+const webpack = require('webpack')
 module.exports = async function (env, argv) {
   const config = await createExpoWebpackConfigAsync(env, argv);
+
+  config.module.rules.push({
+    test: /\.mjs$/,
+    type: 'javascript/auto'
+  }) 
+  config.module.rules.push({
+    test: /\.ts$/,
+include:"/Users/jarettdunn/showing/newnew/client/generated",
+    loader: 'ts-loader'
+  })
+    
 
   // keep everything the same for expo start
   if(env.mode === "development") {
@@ -26,6 +39,18 @@ module.exports = async function (env, argv) {
   config.plugins = config.plugins.filter(
     (plugin) => ["DefinePlugin", "CleanWebpackPlugin"].includes(plugin.constructor.name)
   )
+  config.plugins.push(...[
+    // Work around for Buffer is undefined:
+    // https://github.com/webpack/changelog-v5/issues/10
+    new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+    }),
+    new webpack.ProvidePlugin({
+        process: 'process/browser',
+    }),
+])
+config.resolve.alias = {
+  ...config.resolve.alias,      buffer: path.resolve("./node_modules/buffer")}
 
   config.plugins.push(
     new InlineJSPlugin({
@@ -33,7 +58,6 @@ module.exports = async function (env, argv) {
       filename: "index.html"
     })
   );
-
 
   // this is brittle but works for now.
   const loaders = config.module.rules.find(rule => typeof rule.oneOf !== "undefined");
