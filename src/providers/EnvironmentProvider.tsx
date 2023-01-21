@@ -7,11 +7,15 @@ export interface Environment {
   primary: string
   secondary?: string
 }
-
+declare global {
+  interface Window {
+    xnft: any;
+  }
+}
 export interface EnvironmentContextValues {
-  environment: Environment
+  environment: Environment,
   setEnvironment: (newEnvironment: Environment) => void
-  connection: Connection
+  connection: Connection 
 }
 
 export const ENVIRONMENTS: Environment[] = [
@@ -29,13 +33,9 @@ export const getInitialProps = async ({
 }: {
   ctx: any
 }): Promise<{ cluster: string }> => {
-  const cluster = (ctx.req?.headers.host || ctx.query.host)?.includes('dev')
-    ? 'devnet'
-    : (ctx.query.project || ctx.query.host)?.includes('test')
-    ? 'testnet'
-    : ctx.query.cluster || process.env.BASE_CLUSTER
+  const cluster = 'mainnet-beta'
   return {
-    cluster: firstParam(cluster),
+    cluster: cluster,
   }
 }
 
@@ -47,11 +47,11 @@ export function EnvironmentProvider({
   defaultCluster: string
 }) {
   const cluster = 'mainnet-beta'
-  const foundEnvironment = ENVIRONMENTS.find((e) => e.label === cluster)
-  const [environment, setEnvironment] = useState<Environment>(
+  const foundEnvironment = ENVIRONMENTS[0]
+  let [environment, setEnvironment] = useState<Environment>(
     foundEnvironment ?? ENVIRONMENTS[0]!
   )
-
+    environment.label = 'mainnet-beta'
   useMemo(() => {
     const foundEnvironment = ENVIRONMENTS.find((e) => e.label === cluster)
     setEnvironment(foundEnvironment ?? ENVIRONMENTS[0]!)

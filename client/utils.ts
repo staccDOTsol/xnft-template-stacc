@@ -67,12 +67,7 @@ export async function createFlipUser(
   const switchboardProgram = queueAccount.program;
 
   const keypair = anchor.web3.Keypair.generate();
-  const airdropTxn = await window.xnft.solana.connection.requestAirdrop(
-    keypair.publicKey,
-    1 * anchor.web3.LAMPORTS_PER_SOL
-  );
-  await window.xnft.solana.connection.confirmTransaction(airdropTxn);
-
+  
   const provider = new anchor.AnchorProvider(
     window.xnft.solana.connection,
     new AnchorWallet(keypair),
@@ -89,7 +84,7 @@ export async function createFlipUser(
     provider
   );
   const switchTokenWallet = await spl.createWrappedNativeAccount(
-    newwindow.xnft.solana.connection,
+    window.xnft.solana.connection,
     keypair,
     keypair.publicKey,
     wSolAmount * anchor.web3.LAMPORTS_PER_SOL
@@ -136,13 +131,4 @@ export const verifyPayerBalance = async (
     );
   }
 
-  try {
-    console.log(`Requesting airdrop for user ${payer.toBase58()}`);
-    const AIRDROP_AMT = 1 * anchor.web3.LAMPORTS_PER_SOL;
-    const airdropTxn = await connection.requestAirdrop(payer, AIRDROP_AMT);
-    await connection.confirmTransaction(airdropTxn);
-  } catch (error) {
-    console.log(`Failed to request an airdrop`);
-    console.error(error);
-  }
 };
