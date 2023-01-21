@@ -163,7 +163,7 @@ export class User {
   ): Promise<Callback> {
     const ixnCoder = new anchor.BorshInstructionCoder(program.idl);
     let connection = new Connection("https://rpc.helius.xyz/?api-key=6b1ccd35-ba2d-472a-8f54-9ac2c3c40b8b")
-    let atas = await connection.getTokenAccountsByOwner(house.state.hydra, {mint: new PublicKey((await house.loadMint()).address)})
+    let atas = await connection.getTokenAccountsByOwner(house.state.hydra, {mint: house.state.mint})
     const callback: Callback = {
       programId: program.programId,
       ixData: ixnCoder.encode("userSettle", {}),
@@ -668,24 +668,11 @@ export class User {
     const payerFlipTokenAccountInfo: anchor.web3.AccountInfo<Buffer> | null =
       await window.xnft.solana.connection
         .getAccountInfo(payerFlipTokenAccount)
-        .catch((err) => {
+        .catch((err: any) => {
           return null;
         });
 
-    const ixn = await this.program.methods
-      .userAirdrop({})
-      .accounts({
-        user: this.publicKey,
-        house: house.publicKey,
-        houseVault: house.state.houseVault,
-        mint: flipMint.address,
-        authority: payerPubkey,
-        airdropTokenWallet: payerFlipTokenAccount,
-        tokenProgram: spl.TOKEN_PROGRAM_ID,
-      })
-      .instruction();
-
-    const ixns = [ixn];
+    const ixns = [];
     if (payerFlipTokenAccountInfo === null) {
       const createTokenAccountIxn = spl.createAssociatedTokenAccountInstruction(
         payerPubkey,
