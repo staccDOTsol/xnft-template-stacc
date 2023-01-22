@@ -9,9 +9,9 @@ export interface HouseStateFields {
   authority: PublicKey
   mint: PublicKey
   houseVault: PublicKey
-  hydra: PublicKey
   switchboardQueue: PublicKey
   switchboardMint: PublicKey
+  hydra: PublicKey
   ebuf: Array<number>
 }
 
@@ -20,9 +20,9 @@ export interface HouseStateJSON {
   authority: string
   mint: string
   houseVault: string
-  hydra: string
   switchboardQueue: string
   switchboardMint: string
+  hydra: string
   ebuf: Array<number>
 }
 
@@ -31,9 +31,9 @@ export class HouseState {
   readonly authority: PublicKey
   readonly mint: PublicKey
   readonly houseVault: PublicKey
-  readonly hydra: PublicKey
   readonly switchboardQueue: PublicKey
   readonly switchboardMint: PublicKey
+  readonly hydra: PublicKey
   readonly ebuf: Array<number>
 
   static readonly discriminator = Buffer.from([
@@ -45,9 +45,9 @@ export class HouseState {
     borsh.publicKey("authority"),
     borsh.publicKey("mint"),
     borsh.publicKey("houseVault"),
-    borsh.publicKey("hydra"),
     borsh.publicKey("switchboardQueue"),
     borsh.publicKey("switchboardMint"),
+    borsh.publicKey("hydra"),
     borsh.array(borsh.u8(), 1024, "ebuf"),
   ])
 
@@ -56,9 +56,9 @@ export class HouseState {
     this.authority = fields.authority
     this.mint = fields.mint
     this.houseVault = fields.houseVault
-    this.hydra = fields.hydra
     this.switchboardQueue = fields.switchboardQueue
     this.switchboardMint = fields.switchboardMint
+    this.hydra = fields.hydra
     this.ebuf = fields.ebuf
   }
 
@@ -108,9 +108,9 @@ export class HouseState {
       authority: dec.authority,
       mint: dec.mint,
       houseVault: dec.houseVault,
-      hydra: dec.hydra,
       switchboardQueue: dec.switchboardQueue,
       switchboardMint: dec.switchboardMint,
+      hydra: dec.hydra,
       ebuf: dec.ebuf,
     })
   }
@@ -121,9 +121,9 @@ export class HouseState {
       authority: this.authority.toString(),
       mint: this.mint.toString(),
       houseVault: this.houseVault.toString(),
-      hydra: this.hydra.toString(),
       switchboardQueue: this.switchboardQueue.toString(),
       switchboardMint: this.switchboardMint.toString(),
+      hydra: this.hydra.toString(),
       ebuf: this.ebuf,
     }
   }
@@ -134,9 +134,9 @@ export class HouseState {
       authority: new PublicKey(obj.authority),
       mint: new PublicKey(obj.mint),
       houseVault: new PublicKey(obj.houseVault),
-      hydra: new PublicKey(obj.hydra),
       switchboardQueue: new PublicKey(obj.switchboardQueue),
       switchboardMint: new PublicKey(obj.switchboardMint),
+      hydra: new PublicKey(obj.hydra),
       ebuf: obj.ebuf,
     })
   }

@@ -6,11 +6,6 @@ export type {
   HouseInitParamsFields,
   HouseInitParamsJSON,
 } from "./HouseInitParams"
-export { UserAirdropParams } from "./UserAirdropParams"
-export type {
-  UserAirdropParamsFields,
-  UserAirdropParamsJSON,
-} from "./UserAirdropParams"
 export { UserBetParams } from "./UserBetParams"
 export type { UserBetParamsFields, UserBetParamsJSON } from "./UserBetParams"
 export { UserInitParams } from "./UserInitParams"

@@ -8,7 +8,6 @@ import { RecoilRoot } from "recoil";
 import { HomeScreen } from "./screens/HomeScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SwapBonkers } from "./screens/SwapBonkers";
 import { SwapBoourns } from "./screens/SwapBoourns";
 import { HailHydra } from './screens/HailHydra';
@@ -29,9 +28,7 @@ function TabNavigator() {
         options={{
           headerShown: false,
           tabBarLabel: "Play",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="play" color={color} size={size} />
-          ),
+         
         }}
       />
       <Tab.Screen
@@ -39,9 +36,7 @@ function TabNavigator() {
         component={SwapBonkers}
         options={{
           tabBarLabel: "SwapBonkers",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
-          ),
+       
         }}
       />
       <Tab.Screen
@@ -49,9 +44,7 @@ function TabNavigator() {
         component={SwapBoourns}
         options={{
           tabBarLabel: "SwapBoourns",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
-          ),
+       
         }}
       />
       <Tab.Screen
@@ -59,9 +52,7 @@ function TabNavigator() {
         component={HailHydra}
         options={{
           tabBarLabel: "HailHydra",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="play" color={color} size={size} />
-          ),
+         
         }}
       />
     </Tab.Navigator>

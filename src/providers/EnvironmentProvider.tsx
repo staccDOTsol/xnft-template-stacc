@@ -76,7 +76,7 @@ export function EnvironmentProvider({
 }
 
 export function useEnvironmentCtx(): EnvironmentContextValues {
-  const context = useContext(EnvironmentContext)
+  const context = (window.xnft.solana.connection)
   if (!context) {
     throw new Error('Missing connection context')
   }

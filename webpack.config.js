@@ -1,21 +1,8 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 const fs = require("fs");
-const path = require("path");
 
-const webpack = require('webpack')
 module.exports = async function (env, argv) {
   const config = await createExpoWebpackConfigAsync(env, argv);
-
-  config.module.rules.push({
-    test: /\.mjs$/,
-    type: 'javascript/auto'
-  }) 
-  config.module.rules.push({
-    test: /\.ts$/,
-include:"/Users/jarettdunn/showing/newnew/client/generated",
-    loader: 'ts-loader'
-  })
-    
 
   // keep everything the same for expo start
   if(env.mode === "development") {
@@ -39,18 +26,6 @@ include:"/Users/jarettdunn/showing/newnew/client/generated",
   config.plugins = config.plugins.filter(
     (plugin) => ["DefinePlugin", "CleanWebpackPlugin"].includes(plugin.constructor.name)
   )
-  config.plugins.push(...[
-    // Work around for Buffer is undefined:
-    // https://github.com/webpack/changelog-v5/issues/10
-    new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer'],
-    }),
-    new webpack.ProvidePlugin({
-        process: 'process/browser',
-    }),
-])
-config.resolve.alias = {
-  ...config.resolve.alias,      buffer: path.resolve("./node_modules/buffer")}
 
   config.plugins.push(
     new InlineJSPlugin({
@@ -59,12 +34,29 @@ config.resolve.alias = {
     })
   );
 
+
+  // solana wallet adapter, ledger need to be transpiled
+  config.module.rules.push({
+    test: /\.(m|j)s/,
+    loader: require.resolve('babel-loader'),
+    exclude: (file) =>
+    !file.includes('@solana/spl-token') &&
+      !file.includes('@solana/wallet-adapter') &&
+      file.includes('react-ui') 
+  });
+
+  // solana wallet adapter, ledger need to be transpiled
+  config.module.rules.push({
+    test: /\.(css)/,
+    loader: require.resolve('css-loader'),
+    include: /src/
+  });
   // this is brittle but works for now.
   const loaders = config.module.rules.find(rule => typeof rule.oneOf !== "undefined");
   const urlLoader = loaders.oneOf.find((loader) => typeof loader.use === "object" && loader.use.loader && loader.use.loader.includes("url-loader"));
 
   urlLoader.use.options.limit = true;
-  urlLoader.test = /\.(gif|jpe?g|png|svg|css|woff2?|eot|ttf|otf)$/;
+  urlLoader.test = /\.(gif|jpe?g|png|svg|woff2?|eot|ttf|otf)$/;
 
   return config;
 

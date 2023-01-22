@@ -9,11 +9,10 @@ export type CustomError =
   | InvalidBet
   | OracleQueueRequiresPermissions
   | OracleQueueMismatch
-  | AirdropRequestedTooSoon
-  | UserTokenBalanceHealthy
   | MaxBetAmountExceeded
   | InsufficientFunds
   | FlipRequestedTooSoon
+  | UnauthorizedMint
 
 export class InvalidInitialVrfCounter extends Error {
   static readonly code = 6000
@@ -128,58 +127,47 @@ export class OracleQueueMismatch extends Error {
   }
 }
 
-export class AirdropRequestedTooSoon extends Error {
+export class MaxBetAmountExceeded extends Error {
   static readonly code = 6010
   readonly code = 6010
-  readonly name = "AirdropRequestedTooSoon"
-  readonly msg = "User requested an airdrop too soon"
-
-  constructor(readonly logs?: string[]) {
-    super("6010: User requested an airdrop too soon")
-  }
-}
-
-export class UserTokenBalanceHealthy extends Error {
-  static readonly code = 6011
-  readonly code = 6011
-  readonly name = "UserTokenBalanceHealthy"
-  readonly msg = "User has enough funds and does not require an airdrop"
-
-  constructor(readonly logs?: string[]) {
-    super("6011: User has enough funds and does not require an airdrop")
-  }
-}
-
-export class MaxBetAmountExceeded extends Error {
-  static readonly code = 6012
-  readonly code = 6012
   readonly name = "MaxBetAmountExceeded"
   readonly msg = "Max bet exceeded"
 
   constructor(readonly logs?: string[]) {
-    super("6012: Max bet exceeded")
+    super("6010: Max bet exceeded")
   }
 }
 
 export class InsufficientFunds extends Error {
-  static readonly code = 6013
-  readonly code = 6013
+  static readonly code = 6011
+  readonly code = 6011
   readonly name = "InsufficientFunds"
   readonly msg = "Insufficient funds to request randomness"
 
   constructor(readonly logs?: string[]) {
-    super("6013: Insufficient funds to request randomness")
+    super("6011: Insufficient funds to request randomness")
   }
 }
 
 export class FlipRequestedTooSoon extends Error {
-  static readonly code = 6014
-  readonly code = 6014
+  static readonly code = 6012
+  readonly code = 6012
   readonly name = "FlipRequestedTooSoon"
   readonly msg = "User can flip once every 10 seconds"
 
   constructor(readonly logs?: string[]) {
-    super("6014: User can flip once every 10 seconds")
+    super("6012: User can flip once every 10 seconds")
+  }
+}
+
+export class UnauthorizedMint extends Error {
+  static readonly code = 6013
+  readonly code = 6013
+  readonly name = "UnauthorizedMint"
+  readonly msg = "House has no authority to mint more tokens"
+
+  constructor(readonly logs?: string[]) {
+    super("6013: House has no authority to mint more tokens")
   }
 }
 
@@ -206,15 +194,13 @@ export function fromCode(code: number, logs?: string[]): CustomError | null {
     case 6009:
       return new OracleQueueMismatch(logs)
     case 6010:
-      return new AirdropRequestedTooSoon(logs)
-    case 6011:
-      return new UserTokenBalanceHealthy(logs)
-    case 6012:
       return new MaxBetAmountExceeded(logs)
-    case 6013:
+    case 6011:
       return new InsufficientFunds(logs)
-    case 6014:
+    case 6012:
       return new FlipRequestedTooSoon(logs)
+    case 6013:
+      return new UnauthorizedMint(logs)
   }
 
   return null

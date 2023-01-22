@@ -1,4 +1,4 @@
-import * as anchor from "@coral-xyz/anchor";
+import * as anchor from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
 import {
   AnchorWallet,
@@ -7,15 +7,15 @@ import {
   PermissionAccount,
   ProgramStateAccount,
   VrfAccount,
-} from "@switchboard-xyz/switchboard-v2/lib/cjs";
+} from "@switchboard-xyz/switchboard-v2";
 
 export async function loadSwitchboard(
   provider: anchor.AnchorProvider
 ): Promise<anchor.Program> {
   const switchboardProgram = await loadSwitchboardProgram(
-    "mainnet-beta",
+    "devnet",
     provider.connection,
-    window.xnft.solana
+    ((provider as anchor.AnchorProvider).wallet as AnchorWallet).payer
   );
 
   return switchboardProgram as any;

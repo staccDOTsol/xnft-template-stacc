@@ -31,7 +31,7 @@ export function houseInit(args: HouseInitArgs, accounts: HouseInitAccounts) {
     { pubkey: accounts.authority, isSigner: true, isWritable: true },
     { pubkey: accounts.switchboardMint, isSigner: false, isWritable: false },
     { pubkey: accounts.switchboardQueue, isSigner: false, isWritable: true },
-    { pubkey: accounts.mint, isSigner: true, isWritable: true },
+    { pubkey: accounts.mint, isSigner: false, isWritable: false },
     { pubkey: accounts.houseVault, isSigner: false, isWritable: true },
     { pubkey: accounts.payer, isSigner: true, isWritable: true },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },

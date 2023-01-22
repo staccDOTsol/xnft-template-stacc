@@ -14,9 +14,8 @@ export interface UserSettleAccounts {
   escrow: PublicKey
   rewardAddress: PublicKey
   houseVault: PublicKey
-  associatedTokenProgram: PublicKey
-  vrf: PublicKey
   hydraAta: PublicKey
+  vrf: PublicKey
   tokenProgram: PublicKey
 }
 
@@ -29,13 +28,8 @@ export function userSettle(args: UserSettleArgs, accounts: UserSettleAccounts) {
     { pubkey: accounts.escrow, isSigner: false, isWritable: true },
     { pubkey: accounts.rewardAddress, isSigner: false, isWritable: true },
     { pubkey: accounts.houseVault, isSigner: false, isWritable: true },
-    {
-      pubkey: accounts.associatedTokenProgram,
-      isSigner: false,
-      isWritable: false,
-    },
-    { pubkey: accounts.vrf, isSigner: false, isWritable: false },
     { pubkey: accounts.hydraAta, isSigner: false, isWritable: true },
+    { pubkey: accounts.vrf, isSigner: false, isWritable: false },
     { pubkey: accounts.tokenProgram, isSigner: false, isWritable: false },
   ]
   const identifier = Buffer.from([184, 56, 135, 64, 228, 26, 152, 183])

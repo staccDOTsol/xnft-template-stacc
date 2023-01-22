@@ -14,7 +14,6 @@ export interface UserStateFields {
   switchboardStateBump: number
   vrfPermissionBump: number
   currentRound: types.RoundFields
-  lastAirdropRequestSlot: BN
   ebuf: Array<number>
   history: types.HistoryFields
 }
@@ -29,7 +28,6 @@ export interface UserStateJSON {
   switchboardStateBump: number
   vrfPermissionBump: number
   currentRound: types.RoundJSON
-  lastAirdropRequestSlot: string
   ebuf: Array<number>
   history: types.HistoryJSON
 }
@@ -44,7 +42,6 @@ export class UserState {
   readonly switchboardStateBump: number
   readonly vrfPermissionBump: number
   readonly currentRound: types.Round
-  readonly lastAirdropRequestSlot: BN
   readonly ebuf: Array<number>
   readonly history: types.History
 
@@ -62,7 +59,6 @@ export class UserState {
     borsh.u8("switchboardStateBump"),
     borsh.u8("vrfPermissionBump"),
     types.Round.layout("currentRound"),
-    borsh.u64("lastAirdropRequestSlot"),
     borsh.array(borsh.u8(), 1024, "ebuf"),
     types.History.layout("history"),
   ])
@@ -77,7 +73,6 @@ export class UserState {
     this.switchboardStateBump = fields.switchboardStateBump
     this.vrfPermissionBump = fields.vrfPermissionBump
     this.currentRound = new types.Round({ ...fields.currentRound })
-    this.lastAirdropRequestSlot = fields.lastAirdropRequestSlot
     this.ebuf = fields.ebuf
     this.history = new types.History({ ...fields.history })
   }
@@ -133,7 +128,6 @@ export class UserState {
       switchboardStateBump: dec.switchboardStateBump,
       vrfPermissionBump: dec.vrfPermissionBump,
       currentRound: types.Round.fromDecoded(dec.currentRound),
-      lastAirdropRequestSlot: dec.lastAirdropRequestSlot,
       ebuf: dec.ebuf,
       history: types.History.fromDecoded(dec.history),
     })
@@ -150,7 +144,6 @@ export class UserState {
       switchboardStateBump: this.switchboardStateBump,
       vrfPermissionBump: this.vrfPermissionBump,
       currentRound: this.currentRound.toJSON(),
-      lastAirdropRequestSlot: this.lastAirdropRequestSlot.toString(),
       ebuf: this.ebuf,
       history: this.history.toJSON(),
     }
@@ -167,7 +160,6 @@ export class UserState {
       switchboardStateBump: obj.switchboardStateBump,
       vrfPermissionBump: obj.vrfPermissionBump,
       currentRound: types.Round.fromJSON(obj.currentRound),
-      lastAirdropRequestSlot: new BN(obj.lastAirdropRequestSlot),
       ebuf: obj.ebuf,
       history: types.History.fromJSON(obj.history),
     })

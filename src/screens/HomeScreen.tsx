@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {  Text, TextInput, View } from "react-native";
 import * as Linking from "expo-linking";
-import * as sbv2 from "@switchboard-xyz/switchboard-v2/lib/cjs";
+import * as sbv2 from "@switchboard-xyz/switchboard-v2";
 
 import { Screen } from "../../src/components/Screen";
 
@@ -10,7 +10,7 @@ import chalk from "chalk";
 export const CHECK_ICON = chalk.green("\u2714");
 export const FAILED_ICON = chalk.red("\u2717");
 import { User } from "../../client"
-let PROGRAM_ID = new PublicKey("J83fnAYYEHPdL6LuX3rhNUiHuJrsMTod7ZpB4FAZTtjY")
+let PROGRAM_ID = new PublicKey("UUNnGwg9nNYci6hL1rwr15vobxWSncghgjCvMHp6EL9")
 import * as anchor from '@coral-xyz/anchor'
 import { Idl } from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
@@ -834,7 +834,7 @@ const IDL = {
     }
   ],
   "metadata": {
-    "address": "J83fnAYYEHPdL6LuX3rhNUiHuJrsMTod7ZpB4FAZTtjY"
+    "address": "UUNnGwg9nNYci6hL1rwr15vobxWSncghgjCvMHp6EL9"
   }
 }
 export function HomeScreen() {
@@ -1094,8 +1094,7 @@ let user2: User;
 
 try {
   console.log(111)
-// @ts-ignore
-  user2 = await User.getOrCreate(flipProgram, payer.publicKey, switchboardProgram, mint2);
+  user2 = await User.getOrCreate(flipProgram, payer.publicKey, switchboardProgram);
 console.log(
   `${chalk.blue("Info")}: VRF Flip User account (${chalk.yellow(
     user2.publicKey.toBase58()
